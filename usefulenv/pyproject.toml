@@ -1,0 +1,19 @@
+[project]
+name = "usefulenv"
+version = "0.1.0"
+description = "Smart Irrigation RL Environment using OpenEnv"
+authors = [
+    {name = "Your Name"}
+]
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "pydantic",
+    "requests",
+    "typing-extensions",
+    "python-dotenv"
+]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"

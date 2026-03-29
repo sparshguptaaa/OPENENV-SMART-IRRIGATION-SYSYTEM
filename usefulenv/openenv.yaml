@@ -1,0 +1,25 @@
+name: usefulenv
+version: "1.0.0"
+description: >
+  UsefulEnv is a reinforcement learning environment for smart irrigation,
+  where an agent learns to optimize water usage under dynamic environmental
+  conditions to maintain crop health efficiently.
+
+entrypoint: server.app:app
+
+tags:
+  - reinforcement-learning
+  - smart-irrigation
+  - agriculture
+  - decision-making
+  - openenv
+
+runtime:
+  python: "3.10"
+
+resources:
+  cpu: 2
+  memory: 4Gi
+
+env:
+  MAX_STEPS: 15
