@@ -244,16 +244,25 @@ openenv push --repo-id YOUR_USERNAME/usefulenv
 
 ---
 
-## 🧾 Evaluation Criteria Alignment
+## 🌐 Live API
 
-| Criteria           | Implementation                    |
-|------------------|----------------------------------|
-| Real-world utility | Smart irrigation system 🌱        |
-| Task quality       | Multi-step decisions             |
-| Environment design | Dynamic + stochastic             |
-| Code quality       | Modular OpenEnv structure        |
-| Creativity         | Water optimization + uncertainty |
+Access the deployed API here:
 
+- Swagger UI: https://sparsh01444-usefulenv.hf.space/docs
+
+## 🧪 Example Usage
+
+1. Reset environment:
+   - Endpoint: `/reset`
+   - Query: difficulty = easy
+
+2. Take a step:
+```json
+{
+  "action": {
+    "action_type": "wait"
+  }
+}
 ---
 
 ## 🎯 Conclusion
