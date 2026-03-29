@@ -23,19 +23,6 @@ To create a scalable and realistic environment where AI agents can:
 
 ---
 
-## 🧩 System Architecture
-
-```mermaid
-flowchart TD
-    A[Baseline Agent] --> B[client.py]
-    B --> C[FastAPI Server (app.py)]
-    C --> D[Environment Logic (environment.py)]
-    D --> E[Reward + State Update]
-    E --> C
-    C --> B
-    B --> A
-    D --> F[Grader (grader.py)]
-```
 
 ---
 
