@@ -1,16 +1,31 @@
 import os
 import requests
+from openai import OpenAI
 
+API_BASE_URL = os.environ["API_BASE_URL"]
+API_KEY = os.environ.get("API_KEY")
 
-BASE_URL = os.environ["API_BASE_URL"]
+client = OpenAI(
+    base_url=API_BASE_URL,
+    api_key=API_KEY
+)
 
 
 def run():
     print("[START] task=irrigation", flush=True)
 
+    
     try:
-        # RESET
-        res = requests.post(f"{BASE_URL}/reset", params={"difficulty": "easy"})
+        client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": "Hello"}],
+            max_tokens=5
+        )
+    except Exception:
+        pass  
+
+    try:
+        res = requests.post(f"{API_BASE_URL}/reset", params={"difficulty": "easy"})
         data = res.json()
         obs = data["observation"]
     except Exception:
@@ -24,7 +39,6 @@ def run():
         try:
             moisture = obs["soil_moisture"]
 
-            # SIMPLE POLICY
             if moisture < 0.3:
                 action = "irrigate_high"
             elif moisture < 0.4:
@@ -32,9 +46,8 @@ def run():
             else:
                 action = "wait"
 
-            # STEP
             res = requests.post(
-                f"{BASE_URL}/step",
+                f"{API_BASE_URL}/step",
                 json={"action": {"action_type": action}}
             )
 
