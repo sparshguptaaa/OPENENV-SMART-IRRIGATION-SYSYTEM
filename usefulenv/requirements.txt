@@ -5,3 +5,4 @@ pydantic
 requests
 typing-extensions
 python-dotenv
+openai
