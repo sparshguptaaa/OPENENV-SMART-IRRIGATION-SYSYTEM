@@ -1,14 +1,15 @@
 import os
 import requests
 
-API_BASE_URL = os.getenv("API_BASE_URL", "https://sparsh01444-usefulenv.hf.space")
-BASE_URL = API_BASE_URL
+
+BASE_URL = os.environ["API_BASE_URL"]
 
 
 def run():
     print("[START] task=irrigation", flush=True)
 
     try:
+        # RESET
         res = requests.post(f"{BASE_URL}/reset", params={"difficulty": "easy"})
         data = res.json()
         obs = data["observation"]
@@ -23,6 +24,7 @@ def run():
         try:
             moisture = obs["soil_moisture"]
 
+            # SIMPLE POLICY
             if moisture < 0.3:
                 action = "irrigate_high"
             elif moisture < 0.4:
@@ -30,6 +32,7 @@ def run():
             else:
                 action = "wait"
 
+            # STEP
             res = requests.post(
                 f"{BASE_URL}/step",
                 json={"action": {"action_type": action}}
