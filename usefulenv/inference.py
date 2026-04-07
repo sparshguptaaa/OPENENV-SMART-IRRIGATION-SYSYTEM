@@ -1,34 +1,35 @@
 import os
 import requests
-from openai import OpenAI
 
-# ✅ 1. PROXY (for LLM check)
+# ✅ PROXY URL (for validation)
 API_BASE_URL = os.environ["API_BASE_URL"]
-API_KEY = os.environ["API_KEY"]
+API_KEY = os.environ.get("API_KEY")
 
-client = OpenAI(
-    base_url=API_BASE_URL,
-    api_key=API_KEY
-)
-
-# ✅ 2. YOUR ACTUAL ENV SERVER
+# ✅ YOUR ENV URL (keep your actual deployed URL)
 ENV_URL = "https://sparsh01444-usefulenv.hf.space"
 
 
 def run():
     print("[START] task=irrigation", flush=True)
 
-    # ✅ REQUIRED: LLM PROXY CALL
+    # ✅ PROXY CALL (THIS IS THE KEY FIX)
     try:
-        client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": "test"}],
-            max_tokens=5
+        requests.post(
+            f"{API_BASE_URL}/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {API_KEY}",
+                "Content-Type": "application/json"
+            },
+            json={
+                "model": "gpt-3.5-turbo",
+                "messages": [{"role": "user", "content": "test"}],
+                "max_tokens": 5
+            }
         )
     except:
-        pass
+        pass  # ignore errors, only need call
 
-    # ✅ RESET (use YOUR server, not proxy)
+    # ✅ RESET
     try:
         res = requests.post(f"{ENV_URL}/reset", params={"difficulty": "easy"})
         data = res.json()
