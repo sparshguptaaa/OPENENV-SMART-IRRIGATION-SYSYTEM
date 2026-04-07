@@ -1,7 +1,12 @@
 import requests
 
-BASE_URL = "https://sparsh01444-usefulenv.hf.space"
+import os
 
+API_BASE_URL = os.getenv("API_BASE_URL", "https://sparsh01444-usefulenv.hf.space")
+MODEL_NAME = os.getenv("MODEL_NAME", "baseline")
+HF_TOKEN = os.getenv("HF_TOKEN")
+
+BASE_URL=API_BASE_URL
 
 def run():
     print("[START] task=irrigation", flush=True)
