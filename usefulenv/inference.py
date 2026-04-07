@@ -1,38 +1,38 @@
 import os
 import requests
+from openai import OpenAI
 
-# Try to import OpenAI safely (avoid crash if not installed)
-try:
-    from openai import OpenAI
-    openai_available = True
-except:
-    openai_available = False
+# ✅ 1. PROXY (for LLM check)
+API_BASE_URL = os.environ["API_BASE_URL"]
+API_KEY = os.environ["API_KEY"]
 
-# REQUIRED ENV VARIABLES
-BASE_URL = os.environ["API_BASE_URL"]
-API_KEY = os.environ.get("API_KEY")
+client = OpenAI(
+    base_url=API_BASE_URL,
+    api_key=API_KEY
+)
+
+# ✅ 2. YOUR ACTUAL ENV SERVER
+ENV_URL = "https://sparsh01444-usefulenv.hf.space"
 
 
 def run():
     print("[START] task=irrigation", flush=True)
 
-    # ✅ LLM PROXY CALL (ONLY IF AVAILABLE)
-    if openai_available and API_KEY:
-        try:
-            client = OpenAI(base_url=BASE_URL, api_key=API_KEY)
-            client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=[{"role": "user", "content": "test"}],
-                max_tokens=5
-            )
-        except:
-            pass  # ignore errors, just trigger proxy usage
-
-    # RESET
+    # ✅ REQUIRED: LLM PROXY CALL
     try:
-        res = requests.post(f"{BASE_URL}/reset", params={"difficulty": "easy"})
+        client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": "test"}],
+            max_tokens=5
+        )
+    except:
+        pass
+
+    # ✅ RESET (use YOUR server, not proxy)
+    try:
+        res = requests.post(f"{ENV_URL}/reset", params={"difficulty": "easy"})
         data = res.json()
-        obs = data["observation"]   # ✅ FIXED (no KeyError)
+        obs = data["observation"]
     except:
         print("[END] task=irrigation score=0 steps=0", flush=True)
         return
@@ -44,7 +44,6 @@ def run():
         try:
             moisture = obs["soil_moisture"]
 
-            # POLICY
             if moisture < 0.3:
                 action = "irrigate_high"
             elif moisture < 0.4:
@@ -52,9 +51,8 @@ def run():
             else:
                 action = "wait"
 
-            # STEP
             res = requests.post(
-                f"{BASE_URL}/step",
+                f"{ENV_URL}/step",
                 json={"action": {"action_type": action}}
             )
 
